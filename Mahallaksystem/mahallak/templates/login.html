@@ -37,19 +37,19 @@
         </div>
         </div>
         <section class="section1">
-
             <div class="form-box">
                 <div class="form-value">
-                    <form action="">
+                    <form method="POST">
+                        {% csrf_token %}
                         <h2>login</h2>
                         <div class="inputbox">
                             <ion-icon name="mail-outline"></ion-icon>
-                            <input type="email" required placeholder=" ">
-                            <label for="">Email</label>
+                            <input name="username" required placeholder=" ">
+                            <label for="">username</label>
                         </div>
                         <div class="inputbox">
                             <ion-icon name="lock-closed-outline"></ion-icon>
-                            <input type="password" required placeholder=" ">
+                            <input type="password" name="password" required placeholder=" ">
                             <label for="">Password</label>
                         </div>
                         <div class="forget">
@@ -61,8 +61,12 @@
                             <p>D'ont have an account?<a href="{% url 'register' %}">Register</a></p>
                         </div>
                     </form>
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endif %}
                 </div>
-
             </div>
         </section>
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
