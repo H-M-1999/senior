@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+        <title>Mahallak</title>
+       
+        </head>
+    <body>
+        <div class="all">
+        <div class="header">
+            <div class="container">
+            <div class="navbar">
+                <div class="logo">
+                    <a href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" width="125px" alt="MAHALLAK"></a>
+                </div>
+                
+                <nav>
+                    <ul> 
+                        <li><a href="{% url 'login' %}">login</a></li>
+                        <li><a href="{% url 'stores' %}">Stores</a></li>
+                        <li><a href="{% url 'categories' %}">categories</a></li>
+                        <li><a href="{% url 'products' %}">products</a></li>
+                        <li><a href="{% url 'offers' %}">offers</a></li>
+                        
+                        <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                    </ul>
+                    
+                </nav>
+            </div>
+           
+        </div>
+        </div>
+        <section class="section1">
+
+            <div class="form-box">
+                <div class="form-value">
+                    <form action="">
+                        <h2>login</h2>
+                        <div class="inputbox">
+                            <ion-icon name="mail-outline"></ion-icon>
+                            <input type="email" required placeholder=" ">
+                            <label for="">Email</label>
+                        </div>
+                        <div class="inputbox">
+                            <ion-icon name="lock-closed-outline"></ion-icon>
+                            <input type="password" required placeholder=" ">
+                            <label for="">Password</label>
+                        </div>
+                        <div class="forget">
+                            <label for=""><input type="checkbox">Remember Me <a href="#">Forgot password?</a></label>
+                            
+                        </div>
+                        <button class="button1" type="submit">Log in</button>
+                        <div class="register">
+                            <p>D'ont have an account?<a href="{% url 'register' %}">Register</a></p>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+        <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,152 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <title>MAHALLAK</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="header">
+    <div class="container">
+    <div class="navbar">
+        <div class="logo">
+            <a href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" width="125px" alt="MAHALLAK"></a>
+        </div>
+        
+        <nav>
+            <ul> 
+                <li><a href="{% url 'login' %}">login</a></li>
+                <li><a href="{% url 'stores' %}">Stores</a></li>
+                <li><a href="{% url 'categories' %}">categories</a></li>
+                <li><a href="{% url 'products' %}">products</a></li>
+                <li><a href="{% url 'offers' %}">offers</a></li>
+                
+                <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+            </ul>
+            
+        </nav>
+    </div>
+    <div class="row1">
+        <div class="col-2">
+            <h1 style="font-size: 100px";>store name</h1>
+            <p>store owner</p> 
+            <p>store location</p>
+            <p>store specialty</p>
+        </div>
+        <div class="col-2">
+            <img src="{% static 'images/stores.png' %}" alt="image1" width="500px"a style="background: blue;">
+        </div>
+    </div>
+</div>
+</div>
+
+
+<!-------best sellers------->
+
+
+<div class="categories">
+    <h2 class="title">best sellers</h2>
+    <div class="small-container">
+    <div class="row">
+        <div class="col-3">
+            <img src="{% static 'images/stores.png' %}" alt="image">
+        </div>
+        <div class="col-3">
+            <img src="{% static 'images/stores.png' %}" alt="image">
+        </div>
+        <div class="col-3">
+            <img src="{% static 'images/stores.png' %}" alt="image">
+        </div>
+    </div>
+</div>
+</div>
+
+<!-------featured products------->
+
+<div class="small-container">
+    <h2 class="title">featured products</h2>
+    <div class="row">
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+    </div>
+</div>
+
+
+<!-------Offers------->
+
+<div class="small-container">
+    <h2 class="title">Offers</h2>
+    <div class="row">
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+        <div class="col-4">
+            <img src="{% static 'images/logo.png' %}" alt="">
+            <h4>test image</h4>
+            <p>price</p>
+        </div>
+    </div>
+</div>
+<div id="customize" >
+    <a href="{% url 'customize' %}">customize your store</a>
+</div>
+
+
+</body>
+</html>
