@@ -40,58 +40,63 @@
         <section class="section1">
             <div class="form-box1">
                 <div class="form-value">
-                    <form action="">
+                    <form method="POST">     
+                        {%  csrf_token %}
+
                         <h2>register</h2>
+
+                        <div class="inputbox1" style="border-bottom: none;">
+                            {%if error %}
+                            <p style="color:red">{{error}}</p>
+                            {% endif %}
+                        </div>
+
                         <div class="inputbox1">
-                            <ion-icon name="mail-outline"></ion-icon>
-                            <input type="text" required placeholder=" ">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="text" required placeholder=" " name="username">
+                            <label for="">Username</label>
+                        </div>      
+
+                        <div class="inputbox1">
+                            <ion-icon name="person-outline"></ion-icon>
+                            <input type="email" required placeholder=" " name="email">
                             <label for="">Email</label>
                         </div>
                         <div class="inputbox1">
-                            <ion-icon name="person-outline"></ion-icon>
-                            <input type="email" required placeholder=" ">
-                            <label for="">First name</label>
-                        </div>
-                        <div class="inputbox1">
-                            <ion-icon name="person-outline"></ion-icon>
-                            <input type="text" required placeholder=" ">
-                            <label for="">Last name</label>
-                        </div>
-                        <div class="inputbox1">
                             <ion-icon name="lock-closed-outline"></ion-icon>
-                            <input type="password" required placeholder=" ">
+                            <input type="password" required placeholder=" " name="password">
                             <label for="">Password</label>
                         </div>
                         <div class="inputbox1">
                             <ion-icon name="lock-closed-outline"></ion-icon>
-                            <input type="password" required placeholder=" ">
+                            <input type="password" required placeholder=" "name="confirm password">
                             <label for=""> Confirm password</label>
                         </div>
 
                         <div style="margin: 30px 70px;">
                             <label for="">what type of user are you?:</label>
-                            <input type="radio" name="type" id="customer"><label for="customer">customer</label>
-                            <input type="radio" name="type" id="merchant"><label for="merchant">merchant</label>
+                            <input type="radio" name="type" id="customer" required value="c"><label for="customer">customer</label>
+                            <input type="radio" name="type" id="merchant" required value="m"><label for="merchant">merchant</label>
                         </div>
                         <h4 style="margin: 30px 220px;">choose a bundle:</h4>
                         <div class="bundle"> 
                                            
                             <div>
                                 <label for="free"><h2>free</h2><h1>no ad time</h1></label> 
-                                <input type="radio" required name="bundle" id="free">
+                                <input type="radio" required name="bundle" id="free" value="free">
                             </div>
                             <div>  
                                 <label for="small"> <h2>50$</h2><h1>1 hour of ads/day</h1></label>                          
-                                <input type="radio" required name="bundle" id="small"> 
+                                <input type="radio" required name="bundle" id="small" value="small"> 
                             </div>
                              <div>  
-                                <label for="big"><h2>100$ </h2><h1>2 hours of ads/day</h1></label>                         
-                                <input type="radio" required name="bundle" id ="big">
+                                <label for="large"><h2>100$ </h2><h1>2 hours of ads/day</h1></label>                         
+                                <input type="radio" required name="bundle" id ="large" value="large">
                             </div>
                         </div>
                         <div class="inputbox" style="margin:30px 130px">
                             <ion-icon name="location-outline"></ion-icon>
-                            <input type="text" required placeholder=" ">
+                            <input type="text" required   placeholder=" " name="address">
                             <label for="">Address</label>
                         </div>
                     

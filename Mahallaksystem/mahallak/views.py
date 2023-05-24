@@ -1,10 +1,10 @@
 import http
-
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.http import HttpRequest
 from django.contrib.auth import authenticate, login, logout
 
-from .models import Category, Product, Offer
+from .models import *
 
 
 def calculate_new_price(old_price, discount):
@@ -78,7 +78,52 @@ def products(request):
 
 
 def register(request):
-    return render(request, "register.html")
+    if request.method =="POST":
+        uservalue=request.POST.get("username")
+        passwordvalue1=request.POST.get("password")
+        passwordvalue2=request.POST.get("confirm password")
+        emailvalue=request.POST.get("email")
+        type=request.POST.get("type")
+        address1=request.POST.get("address")
+        bundle=request.POST.get("bundle")
+
+        if passwordvalue1 == passwordvalue2:
+                try:
+                    user= User.objects.get(username=uservalue)
+                    context= { 'error':'username already taken.'}
+                    return render(request, 'register.html', context)
+                except User.DoesNotExist:
+                    user1= User.objects.create_user(uservalue, password= passwordvalue1, email=emailvalue)
+                    if type == "c":
+                        customer1=Customer.objects.create(user=user1,address=address1)
+                        customer1.save()
+                    else :
+                        if bundle == "free":
+                            merchant1=Merchant.objects.create(user=user1,address=address1,bundle="free")
+                            merchant1.save()
+                        elif bundle == "small":
+                            merchant1=Merchant.objects.create(user=user1,address=address1,bundle="small")
+                            merchant1.save()
+                        else :
+                            merchant1=Merchant.objects.create(user=user1,address=address1,bundle="large")
+                            merchant1.save()
+                    user1.save()   
+                    
+
+                    login(request, user1)
+                    return render(request, 'index.html')
+            
+        else:
+                context= { 'error':'The passwords don\'t match'}
+                return render(request, 'register.html', context)
+
+    else:
+        return render(request, 'register.html')        
+    
+    
+
+
+  
 
 
 def store(request):
