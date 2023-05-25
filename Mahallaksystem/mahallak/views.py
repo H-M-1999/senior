@@ -1,10 +1,10 @@
 import http
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest
 from django.contrib.auth import authenticate, login, logout
-
 from .models import *
+from .forms import ProductForm
 
 
 def calculate_new_price(old_price, discount):
@@ -39,20 +39,18 @@ def categories(request):
     }
     categories_list = Category.objects.all()
     data["categories"] = categories_list
-    return render(request, "categories.html",data)
+    return render(request, "categories.html", data)
 
 
 def customize(request):
-    if request.user.is_authenticated:
-        a=0
-        b=0
-        for usr in Merchant.objects.all():
-            if usr.user==request.user:
-                a+=1
-        if a :
-            return render(request,"customize.html")
-        else:
-            return redirect("index")
+    merchant = get_object_or_404(Merchant, user=request.user)
+    if request.method == "POST":
+        pass
+    else:
+        store = merchant.stores.first()
+        products = store.products.all()
+        return render(request, "customize.html", {"merchant": merchant, "store": store, "products": products})
+
 
 def item(request):
     return render(request, "item.html")
@@ -60,7 +58,6 @@ def item(request):
 
 def login_view(request: HttpRequest):
     if request.method == "POST":
-        # check if user is already logged in
         username = request.POST.get("username")
         password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
@@ -78,17 +75,21 @@ def logout_view(request):
     return redirect("login")
 
 
-def newitem(request):
-    if request.user.is_authenticated:
-        a=0
-        b=0
-        for usr in Merchant.objects.all():
-            if usr.user==request.user:
-                a+=1
-        if a :
-            return render(request,"newitem.html")
+def new_item(request):
+    merchant = get_object_or_404(Merchant, user=request.user)
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            print("RUNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNn")
+            form.save()
+            return redirect('.')
         else:
-            return redirect("index")
+            print("ERRRRRRRRRRRRRRRRRRORRRRRRRRRRRRRRr")
+    else :
+        form = ProductForm()
+
+    return render(request, "new-item.html", {'form': form})
+
 
 
 def offers(request):
@@ -97,7 +98,7 @@ def offers(request):
     }
     offers_list = Offer.objects.all()
     data["offers"] = offers_list
-    return render(request, "offers.html",data)
+    return render(request, "offers.html", data)
 
 
 def products(request):
@@ -105,52 +106,42 @@ def products(request):
 
 
 def register(request):
-    if request.method =="POST":
-        uservalue=request.POST.get("username")
-        passwordvalue1=request.POST.get("password")
-        passwordvalue2=request.POST.get("confirm password")
-        emailvalue=request.POST.get("email")
-        type=request.POST.get("type")
-        address1=request.POST.get("address")
-        bundle=request.POST.get("bundle")
+    if request.method == "POST":
+        user = request.POST.get("username")
+        password = request.POST.get("password")
+        password_confirm = request.POST.get("confirm password")
+        email = request.POST.get("email")
+        type = request.POST.get("type")
+        address = request.POST.get("address")
+        bundle = request.POST.get("bundle")
 
-        if passwordvalue1 == passwordvalue2:
-                try:
-                    user= User.objects.get(username=uservalue)
-                    context= { 'error':'username already taken.'}
-                    return render(request, 'register.html', context)
-                except User.DoesNotExist:
-                    user1= User.objects.create_user(uservalue, password= passwordvalue1, email=emailvalue)
-                    if type == "c":
-                        customer1=Customer.objects.create(user=user1,address=address1)
-                        customer1.save()
-                    else :
-                        if bundle == "free":
-                            merchant1=Merchant.objects.create(user=user1,address=address1,bundle="free")
-                            merchant1.save()
-                        elif bundle == "small":
-                            merchant1=Merchant.objects.create(user=user1,address=address1,bundle="small")
-                            merchant1.save()
-                        else :
-                            merchant1=Merchant.objects.create(user=user1,address=address1,bundle="large")
-                            merchant1.save()
-                    user1.save()   
-                    
+        if password != password_confirm:
+            return render(request, 'register.html', {"error": "Passwords don't match"})
+        if User.objects.filter(username=user).exists():
+            return render(request, 'register.html', {"error": "Username already exists"})
+        if User.objects.filter(email=email).exists():
+            return render(request, 'register.html', {"error": "Email already exists"})
+        if type not in ("merchant", "customer"):
+            return render(request, 'register.html', {"error": "Invalid type"})
+        if type == "merchant" and bundle not in ("free", "small", "large"):
+            return render(request, 'register.html', {"error": "Invalid bundle"})
 
-                    login(request, user1)
-                    return render(request, 'index.html')
-            
-        else:
-                context= { 'error':'The passwords don\'t match'}
-                return render(request, 'register.html', context)
-
+        # valid data
+        user = User.objects.create_user(username=user, password=password, email=email)
+        user.save()
+        if type == "customer":
+            customer = Customer(user=user, address=address)
+            customer.save()
+        if type == "merchant":
+            merchant = Merchant(user=user, address=address, bundle=bundle)
+            merchant.save()
+        login(request, user)
+        if type == "merchant":
+            return redirect("store")
+        if type == "customer":
+            return redirect("index")
     else:
-        return render(request, 'register.html')        
-    
-    
-
-
-  
+        return render(request, 'register.html')
 
 
 def store(request):

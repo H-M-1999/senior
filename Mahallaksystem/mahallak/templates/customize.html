@@ -14,84 +14,48 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-    <div class="header">
-    <div class="container">
-    <div class="navbar">
-        <div class="logo">
-            <a href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" width="125px" alt="MAHALLAK"></a>
-        </div>
-        
-        <nav>
-            <ul> 
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">logout</a></li>
-                {% else %}
-                    <li><a href="{% url 'login' %}">login</a></li>
-                {% endif %}
-                <li><a href="{% url 'stores' %}">Stores</a></li>
-                <li><a href="{% url 'categories' %}">categories</a></li>
-                <li><a href="{% url 'products' %}">products</a></li>
-                <li><a href="{% url 'offers' %}">offers</a></li>
-                
-                <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
-            </ul>
-            
-        </nav>
-    </div>
-    <form action="{% url 'store' %}">
-    <div class="row1">
+<form action="/save" method="POST">
+{% csrf_token %}
+    <div class="row 1">
         <div class="col-2">
-            
-            <p>store name</p><input type="text"> 
-            <p>store owner</p><input type="text"> 
-            <p>store location</p><input type="text"> 
-            <p>store specialty</p><input type="text"> 
-        
+            <input required placeholder="{{ store.name }}" name="store-name">
         </div>
+    </div>
+    <div class="row">
         <div class="col-2">
-            <a href="#"><ion-icon name="add-outline" style="height: 400px; width: 400px; background: blueviolet;"></ion-icon></a>
+            <input required placeholder="{{ store.location }}" name="store-name">
         </div>
     </div>
-</div>
-</div>
+</form>
+<form action="/addproduct" method="POST">
+</form>
+<a href="/mahallak/newitem" >new product</a>
+<table border="1">
+    <thead>
+        <tr>
+            <th>name</th>
+            <th>price</th>
+            <th>category</th>
+            <th>preview</th>
+            <th>offer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.category }}</td>
+            <td><img src="{{ product.image.url }}"></td>
+            {% if product.offer %}
+            <td>{{ product.offer.discount }}%</td>
+            {% else %}
+            <td>0</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
 
-
-<!-------best sellers------->
-
-
-<div class="categories" id="best">
-    <h2 class="title">best sellers</h2>
-    <div class="small-container">
-    <div class="row">
-        <div class="col-4" style="border:dashed black">
-            <a href="{% url 'newitem' %}"><ion-icon name="add-outline" style="height: 200px; width: 200px;"></ion-icon></a> 
-         </div>
-    </div>
-</div>
-</div>
-
-<!-------featured products------->
-
-<div class="small-container" id="featured">
-    <h2 class="title">featured products</h2>
-    <div class="row">
-        <div class="col-4" style="border:dashed black">
-            <a href="{% url 'newitem' %}"><ion-icon name="add-outline" style="height: 200px; width: 200px;"></ion-icon></a> 
-         </div>
-    </div>
-</div>
-
-
-<!-------Offers------->
-
-<div class="small-container" id="offers">
-    <h2 class="title">Offers</h2>
-    <div class="row">
-        <div class="col-4" style="border:dashed black">
-           <a href="{% url 'newitem' %}"><ion-icon name="add-outline" style="height: 200px; width: 200px;"></ion-icon></a> 
-        </div>
-    </div>
-</div>
+</table>
 <button type="submit" style="float: right; margin: 30px; width: 100px; height: 50px;">save</button>
 </form>
 </body>
