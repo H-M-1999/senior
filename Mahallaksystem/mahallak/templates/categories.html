@@ -24,7 +24,11 @@
                 
                 <nav>
                     <ul> 
-                        <li><a href="{% url 'login' %}">login</a></li>
+                        {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">login</a></li>
+                {% endif %}
                         <li><a href="{% url 'stores' %}">Stores</a></li>
                         <li><a href="{% url 'categories' %}">categories</a></li>
                         <li><a href="{% url 'products' %}">products</a></li>
@@ -41,86 +45,13 @@
         <div class="small-container">
             <h2 class="title">all categories</h2>
             <div class="row">
+                {% for category in categories %}
                 <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>fashion</h4>
-                    
+                    <img src="{{ category.image.url}}" alt="">
+                    <h4>{{category.name}}</h4>
                 </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>home appliances</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>garden</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>groceries</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>toys</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>candy</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>education</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>automobiles</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>art</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>decor</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>kitchen</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>sports</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>building material</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>car parts</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>gaming</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>electronics</h4>
-                    
-                </div>
+                {% endfor %}
+               
             </div>
         </div>
         </div>

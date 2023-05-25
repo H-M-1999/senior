@@ -24,7 +24,11 @@
                 </div>
                 <nav>
                     <ul> 
-                        <li><a href="{% url 'login' %}">login</a></li>
+                        {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">login</a></li>
+                {% endif %}
                         <li><a href="{% url 'stores' %}">Stores</a></li>
                         <li><a href="{% url 'categories' %}">categories</a></li>
                         <li><a href="{% url 'products' %}">products</a></li>
@@ -39,88 +43,16 @@
         </div>
         </div>
         <div class="small-container">
-            <h2 class="title">all offers</h2>
+            <a href="{% url 'offers' %}"><h2 class="title">Offers</h2></a>
             <div class="row">
+                {% for offer in offers %}
                 <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
+                        <a href="{% url 'item' %}"><img src="{{ offer.product.image.url }}" alt=""></a>
+                        <h4>{{offer.product.name}}</h4>
+                        <p style="text-decoration: line-through">{{  offer.product.price}}</p>
+                        <p>{{ offer.new_price}}</p>
                 </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
+                {%endfor %}
             </div>
         </div>
         </div>

@@ -34,12 +34,25 @@ def index(request):
 
 
 def categories(request):
-    return render(request, "categories.html")
+    data = {
+        "user": request.user
+    }
+    categories_list = Category.objects.all()
+    data["categories"] = categories_list
+    return render(request, "categories.html",data)
 
 
 def customize(request):
-    return render(request, "customize.html")
-
+    if request.user.is_authenticated:
+        a=0
+        b=0
+        for usr in Merchant.objects.all():
+            if usr.user==request.user:
+                a+=1
+        if a :
+            return render(request,"customize.html")
+        else:
+            return redirect("index")
 
 def item(request):
     return render(request, "item.html")
@@ -66,11 +79,25 @@ def logout_view(request):
 
 
 def newitem(request):
-    return render(request, "newitem.html")
+    if request.user.is_authenticated:
+        a=0
+        b=0
+        for usr in Merchant.objects.all():
+            if usr.user==request.user:
+                a+=1
+        if a :
+            return render(request,"newitem.html")
+        else:
+            return redirect("index")
 
 
 def offers(request):
-    return render(request, "offers.html")
+    data = {
+        "user": request.user
+    }
+    offers_list = Offer.objects.all()
+    data["offers"] = offers_list
+    return render(request, "offers.html",data)
 
 
 def products(request):

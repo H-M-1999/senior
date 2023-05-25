@@ -21,7 +21,11 @@
         
         <nav>
             <ul> 
-                <li><a href="{% url 'login' %}">login</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">login</a></li>
+                {% endif %}
                 <li><a href="{% url 'stores' %}">Stores</a></li>
                 <li><a href="{% url 'categories' %}">categories</a></li>
                 <li><a href="{% url 'products' %}">products</a></li>

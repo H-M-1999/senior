@@ -22,7 +22,7 @@ class Customer(models.Model):
     address = models.CharField(max_length=120)
 
     def __str__(self):
-        return f"{self.user} located in {self.location} address {self.address}"
+        return f"{self.user} located in {self.address}"
 
 
 class Category(models.Model):

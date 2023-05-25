@@ -87,7 +87,8 @@
     <div class="row">
         {% for offer in offers %}
         <div class="col-4">
-                <a href="{% url 'item' %}"><img src={{ offer.product.image.url }} alt=""></a>
+                <a href="{% url 'item' %}"><img src="{{ offer.product.image.url }}" alt=""></a>
+                <h4>{{offer.product.name}}</h4>
                 <p style="text-decoration: line-through">{{  offer.product.price}}</p>
                 <p>{{ offer.new_price}}</p>
         </div>
