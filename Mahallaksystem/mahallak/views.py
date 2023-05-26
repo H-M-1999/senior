@@ -1,10 +1,9 @@
-import http
-from django.contrib.auth.models import User
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpRequest
 from django.contrib.auth import authenticate, login, logout
-from .models import *
+from django.http import HttpRequest
+from django.shortcuts import render, redirect, get_object_or_404
+import random
 from .forms import ProductForm
+from .models import *
 
 
 def calculate_new_price(old_price, discount):
@@ -13,6 +12,7 @@ def calculate_new_price(old_price, discount):
 
 class ProductOffer:
     def __init__(self, offer):
+        self.offers = [1, 2, 3, 4]
         self.product = offer.product
         self.new_price = calculate_new_price(self.product.price, offer.discount)
 
@@ -23,7 +23,7 @@ def index(request):
     }
     if not request.user.is_authenticated:
         return redirect("login")
-    categories_list = Category.objects.all()
+    categories_list = random.sample(list(Category.objects.all()), 3)
     products_list = Product.objects.all()
     offers_list = Offer.objects.all()
     offers_list = [ProductOffer(offer) for offer in offers_list]
@@ -45,7 +45,11 @@ def categories(request):
 def customize(request):
     merchant = get_object_or_404(Merchant, user=request.user)
     if request.method == "POST":
-        pass
+        store = merchant.stores.first()
+        store.name = request.POST.get("name")
+        store.location = request.POST.get("location")
+        store.save()
+        return redirect("customize")
     else:
         store = merchant.stores.first()
         products = store.products.all()
@@ -80,16 +84,12 @@ def new_item(request):
     if request.method == "POST":
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
-            print("RUNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNn")
             form.save()
             return redirect('.')
-        else:
-            print("ERRRRRRRRRRRRRRRRRRORRRRRRRRRRRRRRr")
-    else :
+    else:
         form = ProductForm()
 
     return render(request, "new-item.html", {'form': form})
-
 
 
 def offers(request):
