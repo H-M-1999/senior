@@ -31,16 +31,30 @@
                 <li><a href="{% url 'products' %}">products</a></li>
                 <li><a href="{% url 'offers' %}">offers</a></li>
 
-                <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
             </ul>
 
         </nav>
     </div>
+    <div class="row">
     <form action="{% url 'new_item' %}" enctype="multipart/form-data" method="POST">
         {%  csrf_token %}
-        {{ form.as_p }}
-        <button type="submit"> Upload</button>
+        <input required type="text" name="product_name" placeholder="product name">
+        <input required type="number" name="product_price" placeholder="product price">
+        <input required type="text" name="product_description" placeholder="product description">
+        <select required name="category" title="category">
+            {% for category in categories %}
+            <option value="{{category.name}}">{{category.name}}</option>
+            {%endfor%}    
+        </select>
+        <input required type="number" max="100" min="0" name="discount" placeholder="discount %" style="width: 100px";>0 for no discount
+        <input required type="file" name="upload" accept="image/*">
+
+        <button type="submit" style="float:right" > Upload</button>
     </form>
+
+    <a href="{% url 'customize'%}"><button>go to customize</button></a>
+</div>
 </div>
 </div>
 </body>

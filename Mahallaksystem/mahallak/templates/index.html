@@ -31,7 +31,7 @@
                 <li><a href="{% url 'products' %}">products</a></li>
                 <li><a href="{% url 'offers' %}">offers</a></li>
                 
-                <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
             </ul>
             
         </nav>
@@ -42,7 +42,7 @@
             <p>customize your shop design and make a <br>unique style that shows what you sell </p>
         </div>
         <div class="col-2">
-            <img src="{% static 'images/stores.png' %}" alt="image1" width="500px">
+            <img src="{% static 'images/stores.png'%}" alt="image1" width="500px">
         </div>
     </div>
 </div>
@@ -71,7 +71,7 @@
     <div class="row">
         {%  for product in products %}
             <div class="col-4">
-                <a href="{% url 'item' %}"><img src={{ product.image.url }} alt=""></a>
+                <a href="{% url 'item' name=product.name %}"><img src="{{ product.image}}" alt=""></a>
                 <h4>{{ product.name }}</h4>
                 <p>price: {{ product.price}}</p>
             </div>
@@ -87,7 +87,7 @@
     <div class="row">
         {% for offer in offers %}
         <div class="col-4">
-                <a href="{% url 'item' %}"><img src="{{ offer.product.image.url }}" alt=""></a>
+                <a href="{% url 'item' name=offer.product.name %}"><img src="{{ offer.product.image }}" alt=""></a>
                 <h4>{{offer.product.name}}</h4>
                 <p style="text-decoration: line-through">{{  offer.product.price}}</p>
                 <p>{{ offer.new_price}}</p>
@@ -95,7 +95,6 @@
         {%endfor %}
     </div>
 </div>
-
 
 
 </body>

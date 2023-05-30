@@ -32,7 +32,7 @@
                         <li><a href="{% url 'products' %}">products</a></li>
                         <li><a href="{% url 'offers' %}">offers</a></li>
                         
-                        <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                        <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
                     </ul>
                     
                 </nav>
@@ -57,7 +57,7 @@
                             <label for="">Password</label>
                         </div>
                         <div class="forget">
-                            <label for=""><input type="checkbox">Remember Me <a href="#">Forgot password?</a></label>
+                            <label for=""><input type="checkbox">Remember Me <a href="{% url 'cart' %}">Forgot password?</a></label>
                             
                         </div>
                         <button class="button1" type="submit">Log in</button>

@@ -35,7 +35,7 @@
                         <li><a href="{% url 'products' %}">products</a></li>
                         <li><a href="{% url 'offers' %}">offers</a></li>
                         
-                        <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                        <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
                     </ul>
                     
                 </nav>
@@ -46,86 +46,12 @@
         <div class="small-container">
             <h2 class="title">all stores</h2>
             <div class="row">
+                {% for store in stores %}
                 <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>fashion</h4>
-                    
+                    <a href="{% url 'store' name=store.name %}"><img src="{{store.image}}" alt=""></a>
+                    <h4>{{store.name}}</h4>
                 </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>home appliances</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>garden</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>groceries</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>toys</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>candy</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>education</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>automobiles</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>art</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>decor</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>kitchen</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>sports</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>building material</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>car parts</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>gaming</h4>
-                    
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>electronics</h4>
-                    
-                </div>
+                {%endfor%}
             </div>
         </div>
         </div>

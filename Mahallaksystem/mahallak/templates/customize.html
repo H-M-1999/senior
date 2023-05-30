@@ -14,23 +14,55 @@
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
-<form action="{%  url 'customize' %}" method="POST">
-{% csrf_token %}
-    <div class="row 1">
-        <div class="col-2">
-            <input required placeholder="{{ store.name }}" name="name">
+    <div class="header">
+        <div class="container">
+        <div class="navbar">
+            <div class="logo">
+                <a href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}" width="125px" alt="MAHALLAK"></a>
+            </div>
+            
+            <nav>
+                <ul>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}">logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">login</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'stores' %}">Stores</a></li>
+                    <li><a href="{% url 'categories' %}">categories</a></li>
+                    <li><a href="{% url 'products' %}">products</a></li>
+                    <li><a href="{% url 'offers' %}">offers</a></li>
+                    
+                    <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                </ul>
+                
+            </nav>
         </div>
+        
     </div>
+    
     <div class="row">
+<form action="{%  url 'customize' %}" method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+    <div class="row-1">
         <div class="col-2">
-            <input required placeholder="{{ store.location }}" name="location">
+            <label for="name">new store name</label>
+            <input required placeholder="{{store.name}}" name="name" id="name">
         </div>
     </div>
+    <div class="row-1">
+        <div class="col-2">
+            <label for="location">new store location</label>
+            <input required  placeholder="{{store.location}}" name="location" id="location">
+        </div>
+    </div>
+    
+    
+    <input required type="file" name="upload" accept="image/*">
     <button type="submit">update</button>
 </form>
-<form action="/addproduct" method="POST">
-</form>
-<a href="/mahallak/new_item" >new product</a>
+
 <table border="1">
     <thead>
         <tr>
@@ -47,7 +79,7 @@
             <td>{{ product.name }}</td>
             <td>{{ product.price }}</td>
             <td>{{ product.category }}</td>
-            <td><img src="{{ product.image.url }}"></td>
+            <td><img src="{{ product.image}}" style="width:100px"></td>
             {% if product.offer %}
             <td>{{ product.offer.discount }}%</td>
             {% else %}
@@ -57,6 +89,12 @@
         {% endfor %}
 
 </table>
-</form>
+
+<a href="{% url 'new_item' %}"><button>add an item</button> </a>
+
+
+
+</div>
+</div>
 </body>
 </html>

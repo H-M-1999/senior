@@ -2,9 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404
 import random
-from .forms import ProductForm
 from .models import *
-
+from django.core.files.storage import FileSystemStorage
 
 def calculate_new_price(old_price, discount):
     return old_price - old_price * (discount / 100)
@@ -12,7 +11,6 @@ def calculate_new_price(old_price, discount):
 
 class ProductOffer:
     def __init__(self, offer):
-        self.offers = [1, 2, 3, 4]
         self.product = offer.product
         self.new_price = calculate_new_price(self.product.price, offer.discount)
 
@@ -35,7 +33,7 @@ def index(request):
 
 def categories(request):
     data = {
-        "user": request.user
+        
     }
     categories_list = Category.objects.all()
     data["categories"] = categories_list
@@ -44,20 +42,35 @@ def categories(request):
 
 def customize(request):
     merchant = get_object_or_404(Merchant, user=request.user)
-    if request.method == "POST":
+    if request.method == "POST" and request.FILES['upload']:
+        upload=request.FILES['upload']
+        fss= FileSystemStorage()
+        file=fss.save(upload.name,upload)
+        file_url=fss.url(file)
         store = merchant.stores.first()
+        store.image=file_url
         store.name = request.POST.get("name")
         store.location = request.POST.get("location")
         store.save()
-        return redirect("customize")
+        return redirect('customize')
     else:
         store = merchant.stores.first()
         products = store.products.all()
         return render(request, "customize.html", {"merchant": merchant, "store": store, "products": products})
 
 
-def item(request):
-    return render(request, "item.html")
+def item(request,name):
+    product=Product.objects.get(name=name)
+    similar=Product.objects.filter(category=product.category)
+    if request.method == "POST":
+        order=Order(customer=request.user,store=product.store)
+        order.save()
+        order_detail=OrderDetail(product=product,price=product.price,order=order)
+        order_detail.save()
+        return render(request, "cart.html",{"product":product,"order":order,"order_detail":order_detail})
+       
+    else:  
+        return render(request, "item.html",{"product":product,"similar":similar})
 
 
 def login_view(request: HttpRequest):
@@ -80,16 +93,28 @@ def logout_view(request):
 
 
 def new_item(request):
-    merchant = get_object_or_404(Merchant, user=request.user)
-    if request.method == "POST":
-        form = ProductForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('.')
-    else:
-        form = ProductForm()
+     merchant = get_object_or_404(Merchant, user=request.user)
+     categories=Category.objects.all()
+     if request.method == "POST" and request.FILES['upload']:
+        upload=request.FILES['upload']
+        fss= FileSystemStorage()
+        file=fss.save(upload.name,upload)
+        file_url=fss.url(file)
+        image=file_url
+        discount=request.POST.get("discount")
+        name = request.POST.get("product_name")
+        price= request.POST.get("product_price")
+        category=request.POST.get("category")
+        descrpition=request.POST.get("product_description")
+        product=Product(name=name,description=descrpition,image=image,price=price,store=merchant.stores.first(),category=Category.objects.filter(name=category).first())
+        product.save()
+        if int(discount) != 0 :
+            offer=Offer(product=product,discount=discount)
+            offer.save()
+        return redirect("new_item")
+     else:
+        return render(request,"new-item.html",{'categories':categories})
 
-    return render(request, "new-item.html", {'form': form})
 
 
 def offers(request):
@@ -102,7 +127,12 @@ def offers(request):
 
 
 def products(request):
-    return render(request, "products.html")
+    data = {
+        
+    }
+    products_list = Product.objects.all()
+    data["products"] = products_list
+    return render(request, "products.html", data)
 
 
 def register(request):
@@ -134,19 +164,36 @@ def register(request):
             customer.save()
         if type == "merchant":
             merchant = Merchant(user=user, address=address, bundle=bundle)
+            owns=Store(name=" ", location=merchant.address, owner=merchant)     
             merchant.save()
+            owns.save()
+           
         login(request, user)
         if type == "merchant":
             return redirect("store")
         if type == "customer":
             return redirect("index")
     else:
-        return render(request, 'register.html')
+        type=request.POST.get("type")
+        return render(request, 'register.html',{"type":type})
 
 
-def store(request):
-    return render(request, "store.html")
+def store(request,name):
+    store=Store.objects.get(name=name)
+    product_list=store.products.all()
+    offer_list=[product.offer for product in product_list]
+    offer_list=[ProductOffer(offer) for offer in offer_list]
+    return render(request, "store.html",{"store":store,"products":product_list,"offers":offer_list,"user":request.user})    
 
 
 def stores(request):
-    return render(request, "stores.html")
+    data = {
+        
+    }
+    stores_list = Store.objects.all()
+    data["stores"] = stores_list
+    return render(request, "stores.html", data)
+
+def cart(request):
+
+    return render(request,"cart.html")

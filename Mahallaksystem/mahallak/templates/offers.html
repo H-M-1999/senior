@@ -34,7 +34,7 @@
                         <li><a href="{% url 'products' %}">products</a></li>
                         <li><a href="{% url 'offers' %}">offers</a></li>
                         
-                        <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                        <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
                     </ul>
                     
                 </nav>
@@ -47,9 +47,9 @@
             <div class="row">
                 {% for offer in offers %}
                 <div class="col-4">
-                        <a href="{% url 'item' %}"><img src="{{ offer.product.image.url }}" alt=""></a>
+                        <a href="{% url 'item' name=offer.product.name %}"><img src="{{ offer.product.image }}" alt=""></a>
                         <h4>{{offer.product.name}}</h4>
-                        <p style="text-decoration: line-through">{{  offer.product.price}}</p>
+                        <p style="text-decoration: line-through">{{ offer.product.price}}</p>
                         <p>{{ offer.new_price}}</p>
                 </div>
                 {%endfor %}

@@ -31,27 +31,26 @@
                 <li><a href="{% url 'products' %}">products</a></li>
                 <li><a href="{% url 'offers' %}">offers</a></li>
                 
-                <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
             </ul>
             
         </nav>
     </div>
     <div class="row1">
         <div class="col-2">
-            <h1 style="font-size: 100px";>store name</h1>
-            <p>store owner</p> 
-            <p>store location</p>
-            <p>store specialty</p>
+            <h1 style="font-size: 100px";>{{store.name}}</h1>
+            <p>{{store.owner.user}}</p> 
+            <p>{{store.location}}</p>
         </div>
         <div class="col-2">
-            <img src="{% static 'images/stores.png' %}" alt="image1" width="500px"a style="background: blue;">
+            <img src="{{store.image}}" alt="image1" width="500px"a style="background: blue;">
         </div>
     </div>
 </div>
 </div>
 
 
-<!-------best sellers------->
+<!-------best sellers------
 
 
 <div class="categories">
@@ -71,31 +70,20 @@
 </div>
 </div>
 
-<!-------featured products------->
+-------featured products------->
 
 <div class="small-container">
     <h2 class="title">featured products</h2>
     <div class="row">
+        {%for product in products %}
+        {% if product.offer.discount == 0 %}
         <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
+            <img src="{{product.image}}" alt="">
+            <h4>{{product.name}}</h4>
+            <p>{{product.price}}</p>
         </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
+        {%endif%}
+        {%endfor%}
     </div>
 </div>
 
@@ -103,54 +91,23 @@
 <!-------Offers------->
 
 <div class="small-container">
-    <h2 class="title">Offers</h2>
+    <a href="{% url 'offers' %}"><h2 class="title">Offers</h2></a>
     <div class="row">
+        {% for offer in offers %}
         <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
+                <a href="{% url 'item' name=offer.product.name %}"><img src="{{ offer.product.image }}" alt=""></a>
+                <h4>{{offer.product.name}}</h4>
+                <p style="text-decoration: line-through">{{  offer.product.price}}</p>
+                <p>{{ offer.new_price}}</p>
         </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
+        {%endfor %}
     </div>
 </div>
+{% if store.owner.user.id == user.id %}
 <div id="customize" >
     <a href="{% url 'customize' %}">customize your store</a>
 </div>
-
+{%endif%}
 
 </body>
 </html>

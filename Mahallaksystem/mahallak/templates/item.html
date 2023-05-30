@@ -1,7 +1,8 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
@@ -31,23 +32,20 @@
                 <li><a href="{% url 'products' %}">products</a></li>
                 <li><a href="{% url 'offers' %}">offers</a></li>
                 
-                <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
             </ul>
             
         </nav>
     </div>
     <div class="row1">
         <div class="col-2">
-            <h1>product name</h1>
-            <div class="col-2">product category</div>
-            <div class="col-2">product store</div>
+            <h1>{{product.name}}</h1>
+            <div class="col-2">{{product.category}}</div>
+            <div class="col-2">{{product.store.name}}</div>
         </div>
         <div class="col-22">
-            <img src="{% static 'images/stores.png' %}" alt="image1" width="500px"a style="background: blue;">
-            <img src="{% static 'images/stores.png' %}" alt="image1" width="500px"a style="background: blue;">
-            <img src="{% static 'images/stores.png' %}" alt="image1" width="500px"a style="background: blue;">
-            <img src="{% static 'images/stores.png' %}" alt="image1" width="500px"a style="background: blue;">
-            <img src="{% static 'images/stores.png' %}" alt="image1" width="500px"a style="background: blue;">
+            <img src="{{product.image}}" alt="image1" width="500px"a style="background: blue;">
+            
         </div>
     </div>
 </div>
@@ -60,9 +58,23 @@
 <div class="categories">
     <h2 class="title">product description</h2>
     <div class="small-container">
-    <h1>price: 100$</h1><form action=""><button>add to cart</button></form>
+        {% if product.offer %}
+    <h1 >price: <h1 style="text-decoration:line-through">{{product.price}}</h1></h1><h1>{{product.offer.new_price}}</h1>
+        {%else%}
+        <h1>price: {{product.price}}</h1>
+        {%endif%}
+    
+    <div>
+
+    <form  method="POST">
+        {% csrf_token %}
+        
+        <button type="submit" >add to cart</button>
+
+    </form>
+    </div>
     <div class="col-2">
-        <p>this is a description of the product</p>
+        <p>{{product.description}}</p>
     </div>
 </div>
 </div>
@@ -76,46 +88,13 @@
 <div class="small-container1">
     <h2 class="title">similar items</h2>
     <div class="row2">
+        {% for product in similar %}
         <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
+            <img src="{{product.image}}" alt="">
+            <h4>{{product.name}}</h4>
+            <p>{{product.price}}</p>
         </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
-        <div class="col-4">
-            <img src="{% static 'images/logo.png' %}" alt="">
-            <h4>test image</h4>
-            <p>price</p>
-        </div>
+        {%endfor%}
     </div>
 </div>
 

@@ -37,7 +37,7 @@ class Store(models.Model):
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=120)
     owner = models.ForeignKey(Merchant, on_delete=models.CASCADE, related_name="stores")
-    image=models.ImageField(upload_to="store",null=True, blank=True)
+    image=models.ImageField(upload_to="stores",null=True, blank=True)
 
     def __str__(self):
         return f"{self.name} located in {self.location} owned by {self.owner}"
@@ -46,23 +46,24 @@ class Store(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.FloatField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="productsinit")
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="products")
     image = models.ImageField(upload_to="products", null=True, blank=True)
+    description = models.TextField(max_length=500,default="")
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="orders")
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="orders")
 
 
 class OrderDetail(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="orders")
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=0)
     price = models.FloatField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="details")
 
 
 class Offer(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE,related_name="offer")
     discount = models.IntegerField()

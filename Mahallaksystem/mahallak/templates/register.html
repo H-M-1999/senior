@@ -33,7 +33,7 @@
                         <li><a href="{% url 'products' %}">products</a></li>
                         <li><a href="{% url 'offers' %}">offers</a></li>
                         
-                        <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                        <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
                     </ul>
                     
                 </nav>
@@ -79,11 +79,36 @@
 
                         <div style="margin: 30px 70px;">
                             <label for="">what type of user are you?:</label>
-                            <input type="radio" name="type" id="customer" required value="customer"><label for="customer">customer</label>
-                            <input type="radio" name="type" id="merchant" required value="merchant"><label for="merchant">merchant</label>
+                            <input type="radio" name="type" id="customer" required value="customer" onclick="setOptions()" ><label for="customer">customer</label>
+                            <input type="radio" name="type" id="merchant" required value="merchant" onclick="setOption()"><label for="merchant">merchant</label>
                         </div>
                         <h4 style="margin: 30px 220px;">choose a bundle:</h4>
-                        <div class="bundle"> 
+                        
+                        <script>
+                        
+                        function setOptions() 
+                        {
+                            a=document.getElementById("free").disabled = true;
+                            a=document.getElementById("small").disabled = true;
+                            a=document.getElementById("large").disabled = true;
+                        }
+
+                        function setOption() 
+                        {
+                            a=document.getElementById("free").disabled = false;
+                            a=document.getElementById("small").disabled = false;
+                            a=document.getElementById("large").disabled = false;
+                        }
+                        </script>
+
+
+
+
+
+
+
+
+                        <div class="bundle" id="bundle"> 
                                            
                             <div>
                                 <label for="free"><h2>free</h2><h1>no ad time</h1></label> 
@@ -97,7 +122,9 @@
                                 <label for="large"><h2>100$ </h2><h1>2 hours of ads/day</h1></label>                         
                                 <input type="radio" required name="bundle" id ="large" value="large">
                             </div>
+                        
                         </div>
+                        
                         <div class="inputbox" style="margin:30px 130px">
                             <ion-icon name="location-outline"></ion-icon>
                             <input type="text" required   placeholder=" " name="address">

@@ -35,7 +35,7 @@
                         <li><a href="{% url 'products' %}">products</a></li>
                         <li><a href="{% url 'offers' %}">offers</a></li>
                         
-                        <li><a href="#"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
+                        <li><a href="{% url 'cart' %}"><ion-icon class="ion" name="cart-outline"></ion-icon></a></li>
                     </ul>
                     
                 </nav>
@@ -46,86 +46,14 @@
         <div class="small-container">
             <h2 class="title">all products</h2>
             <div class="row">
+                {% for product in products %}
                 <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
+                    <a href="{% url 'item' name=product.name %}"><img src="{{  product.image }}" alt=""></a>
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}}</p>
                 </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
-                <div class="col-4">
-                    <img src="{% static 'images/logo.png' %}" alt="">
-                    <h4>test image</h4>
-                    <p>price</p>
-                </div>
+                {% endfor %}
+                
             </div>
         </div>
         </div>
