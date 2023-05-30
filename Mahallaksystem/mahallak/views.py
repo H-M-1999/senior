@@ -57,16 +57,14 @@ def customize(request):
         store = merchant.stores.first()
         products = store.products.all()
         return render(request, "customize.html", {"merchant": merchant, "store": store, "products": products})
-
+# orderdetails = Order.details.all().delete()
 
 def item(request,name):
     product=Product.objects.get(name=name)
     similar=Product.objects.filter(category=product.category)
     if request.method == "POST":
-        order=Order(customer=request.user,store=product.store)
-        order.save()
-        order_detail=OrderDetail(product=product,price=product.price,order=order)
-        order_detail.save()
+        order,_= Order.objects.get_or_create(customer=request.user, store=product.store)
+        order_detail=OrderDetail.objects.create(product=product,price=product.price,order=order)
         return render(request, "cart.html",{"product":product,"order":order,"order_detail":order_detail})
        
     else:  
@@ -130,7 +128,9 @@ def products(request):
     data = {
         
     }
-    products_list = Product.objects.all()
+    offers = Offer.objects.all()
+    ofp_id = [offer.product.pk for offer in offers]
+    products_list = Product.objects.filter().exclude(id__in=ofp_id)
     data["products"] = products_list
     return render(request, "products.html", data)
 
@@ -181,8 +181,8 @@ def register(request):
 def store(request,name):
     store=Store.objects.get(name=name)
     product_list=store.products.all()
-    offer_list=[product.offer for product in product_list]
-    offer_list=[ProductOffer(offer) for offer in offer_list]
+    offers = Offer.objects.filter(product__in=product_list)
+    offer_list=[ProductOffer(offer) for offer in offers]
     return render(request, "store.html",{"store":store,"products":product_list,"offers":offer_list,"user":request.user})    
 
 

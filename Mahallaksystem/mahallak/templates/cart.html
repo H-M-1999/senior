@@ -41,7 +41,7 @@
 </div>
 <div class="header">
 <div class="row">
-    {%for order_detail in order.details %}
+    {%for order_detail in order.details.all %}
     <img src="{{order_detail.product.image}}" alt="" style="width:100px">
     <p>{{order_detail.product.name}}</p>
     <p>{{order_detail.product.price}}</p>

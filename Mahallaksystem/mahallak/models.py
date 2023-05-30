@@ -34,17 +34,17 @@ class Category(models.Model):
 
 
 class Store(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
     location = models.CharField(max_length=120)
     owner = models.ForeignKey(Merchant, on_delete=models.CASCADE, related_name="stores")
     image=models.ImageField(upload_to="stores",null=True, blank=True)
 
     def __str__(self):
-        return f"{self.name} located in {self.location} owned by {self.owner}"
+        return f"{self.pk} - {self.name} located in {self.location} owned by {self.owner}"
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100 )
     price = models.FloatField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="productsinit")
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="products")
@@ -53,7 +53,7 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    customer = models.OneToOneField(User, on_delete=models.CASCADE, related_name="orders")
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="orders")
 
 
