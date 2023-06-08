@@ -4,17 +4,12 @@ from django.contrib.auth.models import User
 
 
 class Merchant(models.Model):
-    choices = (
-        ("free", "free"),
-        ("small", "small"),
-        ("large", "large"),
-    )
+   
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="merchant")
-    bundle = models.CharField(max_length=20, choices=choices)
     address = models.CharField(max_length=120)
 
     def __str__(self):
-        return f"{self.user} owns {self.bundle} bundle located in {self.address}"
+        return f"{self.user} owns {self.stores} bundle located in {self.address}"
 
 
 class Customer(models.Model):
@@ -54,16 +49,21 @@ class Product(models.Model):
 
 class Order(models.Model):
     customer = models.OneToOneField(User, on_delete=models.CASCADE, related_name="orders")
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="orders")
+    price = models.FloatField(default=0)
+    status = models.CharField(max_length=20, default="pending")
+    address = models.CharField(max_length=120, default="")
 
 
 class OrderDetail(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="orders")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="detail")
     quantity = models.IntegerField(default=0)
     price = models.FloatField()
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="details")
 
 
 class Offer(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE,related_name="offer")
+    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name="offer")
     discount = models.IntegerField()
+    @property
+    def new_price(self):
+        return (self.product.price)-(self.product.price*self.discount/100)

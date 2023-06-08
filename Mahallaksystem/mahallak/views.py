@@ -22,8 +22,8 @@ def index(request):
     if not request.user.is_authenticated:
         return redirect("login")
     categories_list = random.sample(list(Category.objects.all()), 3)
-    products_list = Product.objects.all()
-    offers_list = Offer.objects.all()
+    products_list = random.sample(list(Product.objects.all()), 8)
+    offers_list = random.sample(list(Offer.objects.all()), 8)
     offers_list = [ProductOffer(offer) for offer in offers_list]
     data["offers"] = offers_list
     data["products"] = products_list
@@ -55,20 +55,39 @@ def customize(request):
         return redirect('customize')
     else:
         store = merchant.stores.first()
+        orders=OrderDetail.objects.filter(product__store=store)
         products = store.products.all()
-        return render(request, "customize.html", {"merchant": merchant, "store": store, "products": products})
+        return render(request, "customize.html", {"merchant": merchant, "store": store, "products": products,"orders":orders})
 # orderdetails = Order.details.all().delete()
 
 def item(request,name):
+    data={}
+    address=""
     product=Product.objects.get(name=name)
     similar=Product.objects.filter(category=product.category)
+    has_offer=hasattr(product,'offer')
+    if has_offer :
+        a=product.offer.discount
+        b=product.price
+        c=a*b/100
+        d=b-c
+        data['d']=d
+    
     if request.method == "POST":
-        order,_= Order.objects.get_or_create(customer=request.user, store=product.store)
+        order,_= Order.objects.get_or_create(customer=request.user)
+        if request.user.merchant:
+            address=request.user.merchant.address
+        else :
+            address=request.user.customer.address
+        order.address=address        
+        order.save()
         order_detail=OrderDetail.objects.create(product=product,price=product.price,order=order)
         return render(request, "cart.html",{"product":product,"order":order,"order_detail":order_detail})
        
     else:  
-        return render(request, "item.html",{"product":product,"similar":similar})
+        data["product"]=product
+        data["similar"]= similar
+        return render(request, "item.html",data)
 
 
 def login_view(request: HttpRequest):
@@ -120,6 +139,7 @@ def offers(request):
         "user": request.user
     }
     offers_list = Offer.objects.all()
+    offers_list = [ProductOffer(offer) for offer in offers_list]
     data["offers"] = offers_list
     return render(request, "offers.html", data)
 
@@ -153,8 +173,6 @@ def register(request):
             return render(request, 'register.html', {"error": "Email already exists"})
         if type not in ("merchant", "customer"):
             return render(request, 'register.html', {"error": "Invalid type"})
-        if type == "merchant" and bundle not in ("free", "small", "large"):
-            return render(request, 'register.html', {"error": "Invalid bundle"})
 
         # valid data
         user = User.objects.create_user(username=user, password=password, email=email)
@@ -163,7 +181,7 @@ def register(request):
             customer = Customer(user=user, address=address)
             customer.save()
         if type == "merchant":
-            merchant = Merchant(user=user, address=address, bundle=bundle)
+            merchant = Merchant(user=user, address=address)
             owns=Store(name=" ", location=merchant.address, owner=merchant)     
             merchant.save()
             owns.save()
@@ -195,5 +213,65 @@ def stores(request):
     return render(request, "stores.html", data)
 
 def cart(request):
+    data={}
+    order,_= Order.objects.get_or_create(customer=request.user)
+    if hasattr(request.user,'merchant'):
+            address=request.user.merchant.address
+    else :
+            address=request.user.customer.address
+    order.address=address
+    order.save()
+    order_details=order.details.all()
+    products_list=[detail.product for detail in order_details]
+    offers_list=[product.offer for product in products_list if hasattr(product,'offer')]
+    offers_list=[ProductOffer(offer) for offer in offers_list]
+    data["order"]=order
+    data["order_details"]=order_details
+    data["products"]=products_list        
+    data["offers"]=offers_list        
+    return render(request, "cart.html",data)
 
-    return render(request,"cart.html")
+def add_to_cart(request,id):
+    quantity=request.POST.get("quantity")
+    price=0
+    order,_=Order.objects.get_or_create(customer=request.user)
+    product=Product.objects.get(id=id)
+    if hasattr(product,'offer'):
+        price=product.offer.new_price
+    else : 
+        price=product.price    
+        
+    order_detail=OrderDetail.objects.create(product=product,price=price,order=order,quantity=quantity)
+    return redirect("cart")
+
+
+def delete(request,id):
+    order_detail = OrderDetail.objects.get(id=id)
+    order_detail.delete()
+    return redirect("cart")
+
+def sent(request,id):
+    order_detail = OrderDetail.objects.get(id=id)
+    order_detail.delete()
+    return redirect("customize")
+
+def checkout(request):
+    order=Order.objects.get(customer=request.user)
+    order_details=order.details.all()
+    price=0
+    for order_detail in order_details:
+        price+=order_detail.price*order_detail.quantity
+    order.price=price   
+    order.save()
+    return render(request, "checkout.html",{"order":order,"order_details":order_details})
+
+
+def by_category(request,name):
+    category=Category.objects.get(name=name)
+    products=Product.objects.filter(category=category)
+    return render(request, "bycategory.html",{"products":products,"name":name})
+
+def delete_product(request,id):
+    product=Product.objects.get(id=id)
+    product.delete()
+    return redirect("customize")

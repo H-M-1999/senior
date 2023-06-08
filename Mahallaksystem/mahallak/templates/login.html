@@ -4,6 +4,7 @@
 
 
     <head>
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
@@ -46,6 +47,11 @@
                     <form method="POST">
                         {% csrf_token %}
                         <h2>login</h2>
+                        {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                        {% endif %}
                         <div class="inputbox">
                             <ion-icon name="mail-outline"></ion-icon>
                             <input name="username" required placeholder=" ">
@@ -56,20 +62,13 @@
                             <input type="password" name="password" required placeholder=" ">
                             <label for="">Password</label>
                         </div>
-                        <div class="forget">
-                            <label for=""><input type="checkbox">Remember Me <a href="{% url 'cart' %}">Forgot password?</a></label>
-                            
-                        </div>
-                        <button class="button1" type="submit">Log in</button>
+                    
+                        <button class="button1"  type="submit" >Log in</button>
                         <div class="register">
                             <p>D'ont have an account?<a href="{% url 'register' %}">Register</a></p>
                         </div>
                     </form>
-                    {% if error %}
-                        <div class="alert alert-danger" role="alert">
-                            {{ error }}
-                        </div>
-                    {% endif %}
+                    
                 </div>
             </div>
         </section>

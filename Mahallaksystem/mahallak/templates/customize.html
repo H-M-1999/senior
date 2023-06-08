@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
@@ -60,10 +62,40 @@
     
     
     <input required type="file" name="upload" accept="image/*">
-    <button type="submit">update</button>
+    <button class="btn-primary"  type="submit">update</button class="btn-primary" >
+    
 </form>
+</div>
+<div class="row">
+    <div class="col-3">
+        <table border="1" class="table-dark">
+            <thead>
+                <tr>
+                    <th>customer name</th>
+                    <th>product name</th>
+                    <th>product quantity</th>
+                    <th>address </th>
+                    <th>sent</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for ordered in orders %}
+                <tr>
+                    <td>{{ ordered.order.customer }}</td>
+                    <td>{{ ordered.product.name }}</td>
+                    <td>{{ ordered.quantity }}</td>
+                    <td>{{ ordered.order.address }}</td>
+                    <td><a href="{% url 'sent' id=ordered.id %}"><button class="btn-primary"  class="btn-primary">sent</button class="btn-primary" ></a></td>
 
-<table border="1">
+                    
+                </tr>
+                {% endfor %}
+        
+        </table>
+        </div>
+<div class="col-3">
+<table class="table-dark" border="1">
     <thead>
         <tr>
             <th>name</th>
@@ -71,6 +103,7 @@
             <th>category</th>
             <th>preview</th>
             <th>offer</th>
+            <th>delete</th>
         </tr>
     </thead>
     <tbody>
@@ -85,16 +118,17 @@
             {% else %}
             <td>0</td>
             {% endif %}
+            <td><a href="{% url 'delete_product' id=product.id %}"><button class="btn-primary">delete</button></a></td>
         </tr>
         {% endfor %}
 
 </table>
-
-<a href="{% url 'new_item' %}"><button>add an item</button> </a>
-
-
+</div>
+<a href="{% url 'new_item' %}"><button class="btn-primary" >add an item</button class="btn-primary" > </a>
 
 </div>
+
+
 </div>
 </body>
 </html>

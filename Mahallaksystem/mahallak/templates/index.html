@@ -56,7 +56,7 @@
     <div class="row">
         {% for category in categories %}
         <div class="col-3">
-            <img src={{category.image.url}}  alt=" ">
+            <a href="{% url 'category' name=category.name %}"><img style="box-shadow: 2px 2px 4px;" src={{category.image.url}}  alt=" "></a>
             {{ category.name }}
         </div>
         {% endfor %}
@@ -71,9 +71,9 @@
     <div class="row">
         {%  for product in products %}
             <div class="col-4">
-                <a href="{% url 'item' name=product.name %}"><img src="{{ product.image}}" alt=""></a>
+                <a href="{% url 'item' name=product.name %}"><img style="box-shadow: 2px 2px 4px;" src="{{ product.image}}" alt=""></a>
                 <h4>{{ product.name }}</h4>
-                <p>price: {{ product.price}}</p>
+                <p>price: {{ product.price}} $</p>
             </div>
         {%  endfor %}
     </div>
@@ -87,10 +87,10 @@
     <div class="row">
         {% for offer in offers %}
         <div class="col-4">
-                <a href="{% url 'item' name=offer.product.name %}"><img src="{{ offer.product.image }}" alt=""></a>
+                <a href="{% url 'item' name=offer.product.name %}"><img style="box-shadow: 2px 2px 4px;" src="{{ offer.product.image }}" alt=""></a>
                 <h4>{{offer.product.name}}</h4>
-                <p style="text-decoration: line-through">{{  offer.product.price}}</p>
-                <p>{{ offer.new_price}}</p>
+                <p style="text-decoration: line-through">{{  offer.product.price}} $</p>
+                <p>{{ offer.new_price}} $</p>
         </div>
         {%endfor %}
     </div>

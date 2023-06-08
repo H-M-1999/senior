@@ -2,7 +2,6 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"> 
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -44,14 +43,19 @@
         </div>
         </div>
         <div class="small-container">
-            <h2 class="title">all stores</h2>
+            <h2 class="title">{{name}}</h2>
             <div class="row">
-                {% for store in stores %}
+                {% for product in products %}
                 <div class="col-4">
-                    <a href="{% url 'store' name=store.name %}"><img style="box-shadow: 2px 2px 4px;" src="{{store.image}}" alt=""></a>
-                    <h4>{{store.name}}</h4>
+                    <a href="{% url 'item' name=product.name %}"><img style="box-shadow: 2px 2px 4px;" src="{{ product.image}}" alt=""></a>
+                    <h4>{{product.name}}</h4>
+                    <p>{{product.price}} $</p>
                 </div>
-                {%endfor%}
+                {% endfor %}
+               
             </div>
         </div>
         </div>
+
+    </body>
+    </html>

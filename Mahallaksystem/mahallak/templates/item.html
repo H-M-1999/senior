@@ -58,18 +58,20 @@
 <div class="categories">
     <h2 class="title">product description</h2>
     <div class="small-container">
-        {% if product.offer %}
-    <h1 >price: <h1 style="text-decoration:line-through">{{product.price}}</h1></h1><h1>{{product.offer.new_price}}</h1>
+        {% if product.offer.discount > 0 %}
+    <h1 >price: <h1 style="text-decoration:line-through">{{product.price}} $</h1></h1><h1>{{d}}</h1>
         {%else%}
-        <h1>price: {{product.price}}</h1>
+        <h1>price: {{product.price}} $</h1>
         {%endif%}
     
     <div>
 
-    <form  method="POST">
+    <form  method="POST" action="{% url 'add_to_cart' id=product.id %}">
         {% csrf_token %}
         
-        <button type="submit" >add to cart</button>
+        <button class="btn-primary"  type="submit" >add to cart</button class="btn-primary" >
+        <label for="q">quantity: </label>
+        <input required type="number" name="quantity" id="q">
 
     </form>
     </div>
@@ -90,9 +92,9 @@
     <div class="row2">
         {% for product in similar %}
         <div class="col-4">
-            <img src="{{product.image}}" alt="">
+            <a href="{% url 'item' name=product.name %}"><img style="box-shadow: 2px 2px 4px;" src="{{product.image}}" alt=""></a>
             <h4>{{product.name}}</h4>
-            <p>{{product.price}}</p>
+            <p>{{product.price}} $</p>
         </div>
         {%endfor%}
     </div>
